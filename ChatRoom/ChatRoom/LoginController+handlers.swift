@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     func handleRegister() {
         guard let email = emailTextField.text,
             let password = passwordTextField.text,
@@ -35,7 +35,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             // add more child directory to reconstruct the storage space
             let storageRef = FIRStorage.storage().reference().child("profile_images").child("\(imageName).png")
             
-            if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!) {
+            if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
                 storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
                     //metadata is description of the data uploaded
                     if error != nil {
@@ -63,6 +63,10 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                 print(err)
                 return
             }
+            
+            //update nav bar title
+            self.messagesController?.navigationItem.title = values["name"] as? String
+            
             self.dismiss(animated: true, completion: nil)
         })
     }

@@ -11,6 +11,8 @@ import Firebase
 
 class LoginController: UIViewController {
     
+    var messagesController: MessageController? //allow nav bar title update
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
@@ -31,7 +33,7 @@ class LoginController: UIViewController {
     let loginRegisterButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 236, g: 22, b: 22)
-        button.setTitle("Register", for: .normal)
+        button.setTitle("Login", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
@@ -61,6 +63,8 @@ class LoginController: UIViewController {
                 print(error)
                 return
             }
+            
+            self.messagesController?.fetchUserAndSetupNavBarTitle()//update nav bar title
             
             //successfully log in
             self.dismiss(animated: true, completion: nil)
