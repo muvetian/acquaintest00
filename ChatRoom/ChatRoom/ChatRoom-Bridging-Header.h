@@ -9,5 +9,5 @@
 #ifndef ChatRoom_Bridging_Header_h
 #define ChatRoom_Bridging_Header_h
 
-
+#import <GoogleSignIn/GoogleSignIn.h>
 #endif /* ChatRoom_Bridging_Header_h */
