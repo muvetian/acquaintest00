@@ -37,7 +37,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             
             if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!) {
                 storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
-                    
+                    //metadata is description of the data uploaded
                     if error != nil {
                         print(error)
                         return
@@ -48,7 +48,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                         self.registerUserIntoDatabaseWithUID(uid: uid, values: values)
                     }
                 })
-            }//metadata is description of the data uploaded
+            }
         })
     }
     
