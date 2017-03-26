@@ -8,10 +8,12 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, GIDSignInUIDelegate {
     
     var messagesController: MessageController? //allow nav bar title update
+    var startedGoogleSignIn = false
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
@@ -42,6 +44,22 @@ class LoginController: UIViewController {
         
         return button
     }()
+    
+    let googleLoginButton: GIDSignInButton={
+        let button = GIDSignInButton()
+        button.style = GIDSignInButtonStyle.standard
+        button.colorScheme = GIDSignInButtonColorScheme.light
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    func setupGoogleLoginButton() {
+        // Need x, y, width and height constraints
+        googleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        googleLoginButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 12).isActive = true
+        googleLoginButton.widthAnchor.constraint(equalTo: loginRegisterButton.widthAnchor).isActive = true
+        googleLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
     
     func handleLoginRegister() {
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
@@ -180,17 +198,6 @@ class LoginController: UIViewController {
         passwordTextFieldHeightAnchor?.isActive = true
         
         
-        // Code here to animate to shrink AcquainTest's logo and add a subview for empty profile image for users
-//        if loginRegisterSegmentedControl.selectedSegmentIndex == 1 {
-//            UIView.animate(withDuration: 1, animations: {
-//                self.logoHeaderView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-//            })
-//        } else {
-//            UIView.animate(withDuration: 1, animations: {
-//                self.logoHeaderView.transform = CGAffineTransform.identity
-//            })
-//        }
-        
         if loginRegisterSegmentedControl.selectedSegmentIndex == 1 {
             UIView.animate(withDuration: 1, animations: {
                 let trans = CGAffineTransform(translationX: 0, y: -85)
@@ -218,12 +225,17 @@ class LoginController: UIViewController {
         view.addSubview(profileImageView)
         view.addSubview(loginRegisterSegmentedControl)
         view.addSubview(logoHeaderView)
+        view.addSubview(googleLoginButton)
         
+        setupGoogleLoginButton()
         setupInputsContainterView()
         setupLoginRegisterButton()
         setupProfileImageView()
         setupLoginRegisterSegmentedControl()
         setupLogoHeaderView()
+        
+        //GIDSignIn.sharedInstance().uiDelegate = self
+        //GIDSignIn.sharedInstance().signIn()
     }
     
     func assignBackground(){
