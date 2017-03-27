@@ -13,7 +13,6 @@ import GoogleSignIn
 class LoginController: UIViewController, GIDSignInUIDelegate {
     
     var messagesController: MessageController? //allow nav bar title update
-    var startedGoogleSignIn = false
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
@@ -50,8 +49,13 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         button.style = GIDSignInButtonStyle.standard
         button.colorScheme = GIDSignInButtonColorScheme.light
         button.translatesAutoresizingMaskIntoConstraints = false
+//        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGoogleLogin)))
         return button
     }()
+    
+//    func showGoogleLogin(){
+//        print(123)
+//    }
     
     func setupGoogleLoginButton() {
         // Need x, y, width and height constraints
@@ -234,8 +238,8 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         setupLoginRegisterSegmentedControl()
         setupLogoHeaderView()
         
-        //GIDSignIn.sharedInstance().uiDelegate = self
-        //GIDSignIn.sharedInstance().signIn()
+//        GIDSignIn.sharedInstance().uiDelegate = self
+//        GIDSignIn.sharedInstance().signIn()
     }
     
     func assignBackground(){

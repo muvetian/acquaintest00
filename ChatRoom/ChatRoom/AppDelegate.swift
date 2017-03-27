@@ -62,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 print("Fail to create a Firebase User with Google account: ", error)
                 return
             }
+            //LoginController().dismiss(animated:true,  completion: nil)
         }
     }
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,

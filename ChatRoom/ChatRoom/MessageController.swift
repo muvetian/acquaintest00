@@ -22,8 +22,45 @@ class MessageController: UITableViewController {
         
         // use is not logged in, show the login page
         checkIfUserIsLoggedIn()
+        
+        observeMessages()
     }
     
+    var messages = [Message]()
+    
+    func observeMessages(){
+        let ref = FIRDatabase.database().reference().child("messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject]{
+                let message = Message()
+                message.setValuesForKeys(dictionary)
+                self.messages.append(message)
+                
+                //this will crash because of background thread, so lets call this on dispatch_async main thread
+                //dispatch_async(dispatch_get_main_queue())
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            
+            
+        }, withCancel: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+        
+        let message = messages[indexPath.row]
+        cell.textLabel?.text = message.toId
+        cell.detailTextLabel?.text = message.text
+        
+        return cell
+    }
     override func viewWillAppear(_ animated: Bool) {
         checkIfUserIsLoggedIn()
     }
@@ -38,6 +75,10 @@ class MessageController: UITableViewController {
     
     func handleNewMessage() {
         let newMessageController = NewMessageController()
+        
+        //this allow user to click another user in the NewMessageController by creating a reference with var messagesController so that it will come back to current MessageController.
+        newMessageController.messagesController = self
+        
         // allows newMessageController to have a navigation bar at the top
         let navController = UINavigationController(rootViewController: newMessageController)
         present(navController, animated: true, completion: nil)
@@ -111,6 +152,15 @@ class MessageController: UITableViewController {
         
         self.navigationItem.titleView = titleView
     }
+    
+    func showChatControllerForUser(user: User){
+        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        chatLogController.user = user
+
+        navigationController?.pushViewController(chatLogController, animated: true)
+        
+    }
 
     func handleLogout() {
         
@@ -124,7 +174,6 @@ class MessageController: UITableViewController {
         let loginController = LoginController()
         loginController.messagesController = self //allow nav bar title update
         
-        //let navController = UINavigationController(rootViewController: loginController)
         present(loginController, animated:true, completion: nil)
     }
 
