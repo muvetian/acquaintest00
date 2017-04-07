@@ -44,18 +44,38 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         return button
     }()
     
-    let googleLoginButton: GIDSignInButton={
+    let googleLoginButton: GIDSignInButton = {
         let button = GIDSignInButton()
         button.style = GIDSignInButtonStyle.standard
         button.colorScheme = GIDSignInButtonColorScheme.light
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGoogleLogin)))
+        //        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGoogleLogin)))
         return button
     }()
     
-//    func showGoogleLogin(){
-//        print(123)
-//    }
+    let customGoogleLoginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(r: 220, g: 220, b: 220)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Google Sign in", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        button.addTarget(self, action: #selector(handleGoogleLogin), for: .touchUpInside)
+        return button
+    }()
+    
+    func setupCustomGoogleLoginButton(){
+        customGoogleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        customGoogleLoginButton.topAnchor.constraint(equalTo: googleLoginButton.bottomAnchor, constant: 12).isActive = true
+        customGoogleLoginButton.widthAnchor.constraint(equalTo: googleLoginButton.widthAnchor).isActive = true
+        customGoogleLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+    
+    func handleGoogleLogin(){
+        GIDSignIn.sharedInstance().signIn()
+        self.dismiss(animated: true, completion: nil)
+    }
     
     func setupGoogleLoginButton() {
         // Need x, y, width and height constraints
@@ -64,7 +84,8 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         googleLoginButton.widthAnchor.constraint(equalTo: loginRegisterButton.widthAnchor).isActive = true
         googleLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
-    
+
+        
     func handleLoginRegister() {
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
             handleLogin()
@@ -72,6 +93,7 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
             handleRegister()
         }
     }
+
     
     func handleLogin() {
         guard let email = emailTextField.text,
@@ -231,6 +253,9 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         view.addSubview(logoHeaderView)
         view.addSubview(googleLoginButton)
         
+        view.addSubview(customGoogleLoginButton)
+        setupCustomGoogleLoginButton()
+        
         setupGoogleLoginButton()
         setupInputsContainterView()
         setupLoginRegisterButton()
@@ -238,7 +263,7 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         setupLoginRegisterSegmentedControl()
         setupLogoHeaderView()
         
-//        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().uiDelegate = self
 //        GIDSignIn.sharedInstance().signIn()
     }
     

@@ -14,7 +14,7 @@ import GoogleSignIn
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
-
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
@@ -49,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
         // ...
-        if let error = error {
-            print("Failed to log into Google: ", error)
+        if let err = error {
+            print("Failed to log into Google: ", err)
             return
         }
         
@@ -62,8 +62,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 print("Fail to create a Firebase User with Google account: ", error)
                 return
             }
-            //LoginController().dismiss(animated:true,  completion: nil)
         }
+        
+//        let loginController = LoginController()
+//        
+//        loginController.dismiss(animated:true,  completion: nil)
+
     }
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
                 withError error: NSError!) {
