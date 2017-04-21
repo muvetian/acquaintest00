@@ -2,6 +2,8 @@
 //  UserCell.swift
 //  ChatRoom
 //
+//  Class for a user's cell view in MessageController
+//
 //  Created by Binwei Xu on 4/12/17.
 //  Copyright © 2017 Binwei Xu. All rights reserved.
 //
@@ -28,6 +30,7 @@ class UserCell: UITableViewCell {
         }
     }
     
+    // helper function that setup name and profile image with the uid given
     private func setupNameAndProfileImage(){
         
         if let id = message?.chatPartnerId() {
@@ -45,6 +48,7 @@ class UserCell: UITableViewCell {
         }
     }
 
+    // Setup text layout in the cell
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -71,6 +75,7 @@ class UserCell: UITableViewCell {
         return label
     }()
     
+    // initiate a tableview cell object with subviews included
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         

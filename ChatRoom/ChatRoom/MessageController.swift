@@ -114,13 +114,13 @@ class MessageController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let message = messages[indexPath.row]
         guard let chatPartnerId = message.chatPartnerId() else {
-            return
+            return // seek a better to catch error or missing data
         }
         
         let ref = FIRDatabase.database().reference().child("users").child(chatPartnerId)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: AnyObject] else {
-                return
+                return  // seek a better to catch error or missing data
             }
             
             let user = User()

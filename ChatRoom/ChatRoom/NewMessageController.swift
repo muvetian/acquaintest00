@@ -48,7 +48,6 @@ class NewMessageController: UITableViewController {
 //                user.name = dictionary["name"]
             }
         }, withCancel: nil)
-        
     }
     
     func handleCancel() {

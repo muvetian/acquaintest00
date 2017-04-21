@@ -2,6 +2,8 @@
 //  ChatMessageCell.swift
 //  ChatRoom
 //
+//  Create chat message objects that are presented in ChatLogController
+//
 //  Created by Binwei Xu on 4/20/17.
 //  Copyright © 2017 Binwei Xu. All rights reserved.
 //

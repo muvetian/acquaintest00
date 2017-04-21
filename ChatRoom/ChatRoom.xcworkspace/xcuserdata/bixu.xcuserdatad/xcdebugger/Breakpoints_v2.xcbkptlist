@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChatRoom/LoginController+handlers.swift"
-            timestampString = "514065885.894293"
+            timestampString = "514510525.492276"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "registerUserIntoDatabaseWithUID(uid:values:)"
             landmarkType = "7">
          </BreakpointContent>
