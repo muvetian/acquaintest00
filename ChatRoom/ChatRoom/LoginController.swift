@@ -104,7 +104,7 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         }
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
-                print(error)
+                print(error as Any)
                 return
             }
             
@@ -290,7 +290,7 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         loginRegisterSegmentedControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
-    // keep a reference
+    // keep a reference to the attributes of this class
     var inputsContainerViewHeightAnchor: NSLayoutConstraint?
     var nameTextFieldHeightAnchor: NSLayoutConstraint?
     var emailTextFieldHeightAnchor: NSLayoutConstraint?

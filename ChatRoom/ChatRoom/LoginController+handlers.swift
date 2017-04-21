@@ -21,7 +21,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         }
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user: FIRUser?, error) in
             if error != nil {
-                print(error)
+                print(error as Any)
                 return
             }
             
@@ -39,7 +39,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                 storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
                     //metadata is description of the data uploaded
                     if error != nil {
-                        print(error)
+                        print(error as Any)
                         return
                     }
                     
@@ -54,13 +54,14 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     
     private func registerUserIntoDatabaseWithUID(uid : String, values: [String: Any]) {
         
-        //successfully authenticated user
-        let ref = FIRDatabase.database().reference(fromURL: "https://chatroom-29e51.firebaseio.com/")
+        // successfully authenticated user
+        // replaced reference(fromURL: "https://chatroom-29e51.firebaseio.com/")
+        let ref = FIRDatabase.database().reference()
         let usersReference = ref.child("users").child(uid)
         usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
             
             if err != nil {
-                print(err)
+                print(err as Any)
                 return
             }
             

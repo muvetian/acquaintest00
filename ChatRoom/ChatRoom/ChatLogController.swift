@@ -9,16 +9,52 @@
 import UIKit
 import Firebase
 
-class ChatLogController: UICollectionViewController, UITextFieldDelegate {
+class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
     
     // fetch User object from NewMessageController and pass to chatlogcontroller
     var user: User? {
         didSet{
             //fetch the name from newMessageController
             navigationItem.title = user?.name
+            
+            observeMessages()
         }
     }
     
+    //to store all the messages from/to the current user
+    var messages = [Message]()
+    
+    func observeMessages(){
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else{
+            return
+        }
+        
+        let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(uid)
+        
+        userMessageRef.observe(.childAdded, with: { (snapshot) in
+            
+            let messageId = snapshot.key
+            let messageRef = FIRDatabase.database().reference().child("messages").child(messageId)
+            messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dictionary = snapshot.value as? [String : Any] else {
+                    return
+                }
+                
+                let message = Message()
+                //potential of crashing if keys don't match (with the types defined in Message class)
+                message.setValuesForKeys(dictionary)
+                
+                if message.chatPartnerId() == self.user?.id {
+                    self.messages.append(message)
+                    
+                    DispatchQueue.main.async(execute: {
+                        self.collectionView?.reloadData()
+                    })
+                }
+
+            }, withCancel: nil)
+        }, withCancel: nil)
+    }
     
     lazy var inputTextField: UITextField = {
         let textField = UITextField()
@@ -30,13 +66,33 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate {
         return textField
     }()
     
+    let cellId = "cellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        collectionView?.alwaysBounceVertical = true
         collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
         
         setupInputComponents()
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatMessageCell
+        
+        //downcast to ChatMessageCell already and put the message text into the cells
+        let message = messages[indexPath.item]
+        cell.textView.text = message.text
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 60)
     }
     
     func setupInputComponents(){
@@ -96,7 +152,22 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate {
         let toId = user!.id!
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         let values: [String: AnyObject] = ["text": inputTextField.text! as AnyObject, "toId": toId as AnyObject, "fromId": fromId as AnyObject, "timestamp": timestamp]
-        childRef.updateChildValues(values)
+//        childRef.updateChildValues(values)
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error as Any)
+                return
+            }
+            
+            let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(fromId)
+            
+            let messageId = childRef.key
+            userMessageRef.updateChildValues([messageId: 1])
+            
+            let recipientMessageRef = FIRDatabase.database().reference().child("user-messages").child(toId)
+            recipientMessageRef.updateChildValues([messageId: 1])
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
