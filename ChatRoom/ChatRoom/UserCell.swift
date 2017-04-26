@@ -14,6 +14,7 @@ import Firebase
 
 class UserCell: UITableViewCell {
     
+    // initiate a variable message to be included in a user cell.
     var message: Message? {
         didSet{
             setupNameAndProfileImage()

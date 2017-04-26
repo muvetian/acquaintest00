@@ -12,18 +12,19 @@ import UIKit
 
 class ChatMessageCell: UICollectionViewCell {
 
+    // setup textView for each chat log cell
     let textView: UITextView = {
         let tv = UITextView()
         tv.text = "SAMPLE PLACEHOLDER"
         tv.font = .systemFont(ofSize: 16)
-        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.translatesAutoresizingMaskIntoConstraints = false  //allow constraints to work
         return tv
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(textView)
+        addSubview(textView) //include the textView
         
         // Constraint anchors: x, y, width, height
         textView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
@@ -35,3 +36,4 @@ class ChatMessageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

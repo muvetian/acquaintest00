@@ -17,29 +17,30 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             //fetch the name from newMessageController
             navigationItem.title = user?.name
             
-            observeMessages()
+            observeMessages() //insert messages into view
         }
     }
     
-    //to store all the messages from/to the current user
+    //class variable to store all the messages from/to the current user
     var messages = [Message]()
     
     func observeMessages(){
+        // acquire current user's uid
         guard let uid = FIRAuth.auth()?.currentUser?.uid else{
             return
         }
         
+        // get message's reference in Firebase
         let userMessageRef = FIRDatabase.database().reference().child("user-messages").child(uid)
         
+        // get actual message's contents from Firebase
         userMessageRef.observe(.childAdded, with: { (snapshot) in
-            
             let messageId = snapshot.key
             let messageRef = FIRDatabase.database().reference().child("messages").child(messageId)
             messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let dictionary = snapshot.value as? [String : Any] else {
                     return
                 }
-                
                 let message = Message()
                 //potential of crashing if keys don't match (with the types defined in Message class)
                 message.setValuesForKeys(dictionary)
@@ -51,7 +52,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                         self.collectionView?.reloadData()
                     })
                 }
-
             }, withCancel: nil)
         }, withCancel: nil)
     }
@@ -66,6 +66,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         return textField
     }()
     
+    //class variable for cell ID
     let cellId = "cellId"
     
     override func viewDidLoad() {
@@ -95,6 +96,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         return CGSize(width: view.frame.width, height: 60)
     }
     
+    // setup the constraints of each component in the chat log view
     func setupInputComponents(){
         let containerView = UIView()
         
@@ -109,8 +111,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        
-        
         let sendButton = UIButton(type: .system)
         
         sendButton.setTitle("Send", for: .normal)
@@ -122,7 +122,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-        
         
         containerView.addSubview(inputTextField)
         //x,y,w,h
@@ -136,7 +135,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         separatorLineView.backgroundColor = UIColor(r: 220, g: 220, b: 220)
         separatorLineView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(separatorLineView)
-        //xywh
+        //x,y,w,h
         separatorLineView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
         separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
         separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
@@ -144,6 +143,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
     }
     
+    // function that handle the action when send button is hit
     func handleSend(){
         let ref = FIRDatabase.database().reference().child("messages")
         let childRef = ref.childByAutoId()

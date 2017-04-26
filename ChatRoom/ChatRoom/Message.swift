@@ -16,6 +16,7 @@ class Message: NSObject {
     var timestamp: NSNumber?
     var toId: String?
     
+    //find the chat partner's ID of current user
     func chatPartnerId() -> String? {
         if fromId == FIRAuth.auth()?.currentUser?.uid {
             return toId
@@ -24,3 +25,4 @@ class Message: NSObject {
         }
     }
 }
+

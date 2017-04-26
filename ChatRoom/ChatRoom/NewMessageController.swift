@@ -11,8 +11,9 @@ import Firebase
 
 class NewMessageController: UITableViewController {
 
+    //class variables
     let cellId = "cellId"
-    var users = [User]()
+    var users = [User]() // array to store all other users visible to current user
     
     
     override func viewDidLoad() {
@@ -50,6 +51,7 @@ class NewMessageController: UITableViewController {
         }, withCancel: nil)
     }
     
+    // return to MessageController
     func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
@@ -78,7 +80,6 @@ class NewMessageController: UITableViewController {
         if let profileImageUrl = user.profileImageUrl {
             cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
         }
-        
         return cell
     }
     
@@ -86,6 +87,5 @@ class NewMessageController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 66
     }
-    
 }
 

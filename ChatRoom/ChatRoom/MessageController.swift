@@ -27,22 +27,24 @@ class MessageController: UITableViewController {
         checkIfUserIsLoggedIn()
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        
     }
     
+    // to store all messages and group by users in a dictionary
     var messages = [Message]()
     var messagesDictionary = [String: Message]()
     
+    // acquire messages and present them
     func observeUserMessages(){
         guard let uid = FIRAuth.auth()?.currentUser?.uid else {
             return
         }
         
+        //acquire the list of messages related to the current user
         let ref = FIRDatabase.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
             let messageId = snapshot.key
             let messageReference = FIRDatabase.database().reference().child("messages").child(messageId)
-            
+            // get the actual message from the list
             messageReference.observeSingleEvent(of: .value, with: { (snapshot2) in
                 if let dictionary = snapshot2.value as? [String: AnyObject]{
                     let message = Message()
@@ -66,13 +68,13 @@ class MessageController: UITableViewController {
         }, withCancel: nil)
     }
     
+    // old version to present messages and should be deleted after final testing
     func observeMessages(){
         let ref = FIRDatabase.database().reference().child("messages")
         ref.observe(.childAdded, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject]{
                 let message = Message()
                 message.setValuesForKeys(dictionary)
-                
                 
                 if let toId = message.toId {
                     self.messagesDictionary[toId] = message
@@ -81,7 +83,6 @@ class MessageController: UITableViewController {
                         return (m1.timestamp?.intValue)! > (m2.timestamp?.intValue)!
                     })
                 }
-                
                 //this will crash because of background thread, so lets call this on dispatch_async main thread
                 //dispatch_async(dispatch_get_main_queue())
                 
@@ -89,8 +90,6 @@ class MessageController: UITableViewController {
                     self.tableView.reloadData()
                 }
             }
-            
-            
         }, withCancel: nil)
     }
     
@@ -134,7 +133,7 @@ class MessageController: UITableViewController {
         checkIfUserIsLoggedIn()
     }
     
-
+    // allow user to send a new message to another user
     func handleNewMessage() {
         let newMessageController = NewMessageController()
         
@@ -146,6 +145,7 @@ class MessageController: UITableViewController {
         present(navController, animated: true, completion: nil)
     }
     
+    // helper method to check if a user is logged in
     func checkIfUserIsLoggedIn(){
         if FIRAuth.auth()?.currentUser?.uid == nil{
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
@@ -154,6 +154,7 @@ class MessageController: UITableViewController {
         }
     }
     
+    // fetch info of current user to setup the nav bar
     func fetchUserAndSetupNavBarTitle() {
         guard let uid = FIRAuth.auth()?.currentUser?.uid else {
             // for some reason uid = nil
@@ -169,6 +170,7 @@ class MessageController: UITableViewController {
         }, withCancel: nil)
     }
     
+    // setup the layout of components in tab bar and present the view
     func setupNavBarWithUser(user: User) {
         messages.removeAll()
         messagesDictionary.removeAll()
@@ -210,17 +212,16 @@ class MessageController: UITableViewController {
         containerView.addSubview(nameLabel)
         nameLabel.text = user.name
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-
         
         nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
         nameLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
         nameLabel.heightAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
         
-        
         self.navigationItem.titleView = titleView
     }
     
+    // present the chat log view
     func showChatControllerForUser(user: User){
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         
@@ -230,8 +231,8 @@ class MessageController: UITableViewController {
         
     }
 
+    // helper that handle the logout
     func handleLogout() {
-        
         // when logout bottom is clicked, sign out the current account
         do {
             try FIRAuth.auth()?.signOut()
