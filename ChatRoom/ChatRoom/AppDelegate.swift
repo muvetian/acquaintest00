@@ -22,13 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-    
-        window?.rootViewController = UINavigationController(rootViewController: MessageController())
-        
-        // for GIDSignInBotton to work
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
-    
+        
+//        window?.rootViewController = UINavigationController(rootViewController: MessageController())
+        window?.rootViewController = CustomTabBarController()
+        // for GIDSignInBotton to work
+        
         return true
     }
     

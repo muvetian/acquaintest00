@@ -11,6 +11,7 @@ import Firebase
 import GoogleSignIn
 
 class LoginController: UIViewController, GIDSignInUIDelegate {
+    var myProfileController: MyProfileController?
     
     var messagesController: MessageController? //allow nav bar title update
     
@@ -50,6 +51,7 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         button.colorScheme = GIDSignInButtonColorScheme.light
         button.translatesAutoresizingMaskIntoConstraints = false
         //        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showGoogleLogin)))
+
         return button
     }()
     
@@ -75,6 +77,8 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
     func handleGoogleLogin(){
         GIDSignIn.sharedInstance().signIn()
         self.dismiss(animated: true, completion: nil)
+        
+
     }
     
     func setupGoogleLoginButton() {

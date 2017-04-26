@@ -171,10 +171,11 @@ class MessageController: UITableViewController {
             print(logoutError)
         }
         
+        
         let loginController = LoginController()
         loginController.messagesController = self //allow nav bar title update
         
-        present(loginController, animated:true, completion: nil)
+        self.present(loginController, animated:true, completion: nil)
     }
 
 }
