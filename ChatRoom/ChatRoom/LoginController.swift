@@ -11,10 +11,13 @@ import Firebase
 import GoogleSignIn
 
 class LoginController: UIViewController, GIDSignInUIDelegate {
+<<<<<<< HEAD
     var myProfileController: MyProfileController?
     
     var messagesController: MessageController? //allow nav bar title update
     
+=======
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
@@ -32,6 +35,21 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         return view
     }()
     
+    let googleLoginButton: GIDSignInButton={
+        let button = GIDSignInButton()
+        button.style = GIDSignInButtonStyle.standard
+        button.colorScheme = GIDSignInButtonColorScheme.light
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    func setupGoogleLoginButton() {
+        // Need x, y, width and height constraints
+        googleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        googleLoginButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 12).isActive = true
+        googleLoginButton.widthAnchor.constraint(equalTo: loginRegisterButton.widthAnchor).isActive = true
+        googleLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
     let loginRegisterButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 236, g: 22, b: 22)
@@ -249,17 +267,22 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         super.viewDidLoad()
         
         assignBackground()
-        
+        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().signIn()
+
         view.addSubview(inputsContainerView)
         view.addSubview(loginRegisterButton)
         view.addSubview(profileImageView)
         view.addSubview(loginRegisterSegmentedControl)
         view.addSubview(logoHeaderView)
         view.addSubview(googleLoginButton)
+<<<<<<< HEAD
         
         view.addSubview(customGoogleLoginButton)
         setupCustomGoogleLoginButton()
         
+=======
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
         setupGoogleLoginButton()
         setupInputsContainterView()
         setupLoginRegisterButton()
@@ -270,7 +293,11 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         GIDSignIn.sharedInstance().uiDelegate = self
 //        GIDSignIn.sharedInstance().signIn()
     }
-    
+//    override func viewDidAppear(_ animated: didMoveToParentViewController) {
+//        view.addSubview(googleLoginButton)
+//        setupGoogleLoginButton()
+//    }
+//    
     func assignBackground(){
         let background = UIImage(named: "loginpagebackground")
         

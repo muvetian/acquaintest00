@@ -11,5 +11,8 @@ pod 'Firebase/Database'
 pod 'Firebase/Auth'
 pod 'Firebase/Storage'
 pod 'GoogleSignIn'
+<<<<<<< HEAD
 
+=======
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
 end

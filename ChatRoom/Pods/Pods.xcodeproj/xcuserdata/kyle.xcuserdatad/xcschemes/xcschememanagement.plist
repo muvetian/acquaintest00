@@ -6,6 +6,7 @@
 	<dict>
 		<key>GTMOAuth2.xcscheme</key>
 		<dict>
+<<<<<<< HEAD
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
@@ -23,6 +24,25 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>4</integer>
+=======
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>GTMSessionFetcher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>GoogleToolboxForMac.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-ChatRoom.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>

@@ -9,7 +9,10 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+<<<<<<< HEAD
 
+=======
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
@@ -33,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     
+<<<<<<< HEAD
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:])
         -> Bool {
             // handle the return from safari to the current app
@@ -51,6 +55,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         // ...
         if let err = error {
             print("Failed to log into Google: ", err)
+=======
+        window?.rootViewController = UINavigationController(rootViewController: MessageController())
+        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+    return true
+    }
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any])
+        -> Bool {
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                     annotation: [:])
+    }
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        return GIDSignIn.sharedInstance().handle(url,
+                                                 sourceApplication: sourceApplication,
+                                                 annotation: annotation)
+    }
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
+        // ...
+        if let error = error {
+            print(error)
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
             return
         }
         
@@ -58,6 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let credential = FIRGoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                           accessToken: authentication.accessToken)
         FIRAuth.auth()?.signIn(with: credential) { (user, error) in
+<<<<<<< HEAD
             if let error = error {
                 print("Fail to create a Firebase User with Google account: ", error)
                 return
@@ -68,15 +95,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 //        
 //        loginController.dismiss(animated:true,  completion: nil)
 
+=======
+            // ...
+            if let error = error {
+                // ...
+                return
+            }
+        }
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
     }
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!,
                 withError error: NSError!) {
         // Perform any operations when the user disconnects from app here.
         // ...
     }
+<<<<<<< HEAD
 
     
 
+=======
+    
+>>>>>>> ebe1aa61e5923320ddcda38621cc2ee8bb1c7d6a
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
